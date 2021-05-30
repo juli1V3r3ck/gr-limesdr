@@ -122,14 +122,6 @@ self.$(id).set_tcxo_dac($dacVal)
         <key>agc_enabled</key>
         <value>0</value>
         <type>int</type>
-        <option>
-            <name>Disabled</name>
-            <key>0</key>
-        </option>
-        <options>
-            <name>Enabled</name>
-            <key>1</key>
-        </option>
         <hide>
         #if $filename() != ""
           all
@@ -137,6 +129,14 @@ self.$(id).set_tcxo_dac($dacVal)
           none
         #end if
         </hide>
+        <option>
+            <name>Disabled</name>
+            <key>0</key>
+        </option>
+        <option>
+            <name>Enabled</name>
+            <key>1</key>
+        </option>
     </param>
 
     <param>
@@ -519,7 +519,7 @@ Here you can select oversampling value for RX. Default value uses highest possib
 
 Note: LimeSDR-Mini and LimeSDR-Micro supports only the same oversampling value for TX and RX.
 -------------------------------------------------------------------------------------------------------------------
-Automatic Gain Control
+AUTOMATIC GAIN CONTROL
 
 Here you can enable/disable the AGC of the RX path.
 -------------------------------------------------------------------------------------------------------------------
