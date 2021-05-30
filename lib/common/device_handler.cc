@@ -565,11 +565,11 @@ void device_handler::set_tcxo_dac(int device_number, uint16_t dacVal) {
 void device_handler::set_agc(int device_number, int enabled) {
     // Default values (TODO: transform into parameters)
     const double CREST_FACTOR = 1.414; // Crest factor of a sine wave (FSK modulation)
-    const int AGC_MODE_val = 1;
-    const int AGC_BYP_val = 0;
-    const int AGC_AVG_val = 0;
-    const int AGC_K_val = 131072;
-    const int AGC_ADESIRED_val = 2048;
+    const uint16_t AGC_MODE_val = 1;
+    const uint16_t AGC_BYP_val = 0;
+    const uint16_t AGC_AVG_val = 0;
+    const uint16_t AGC_K_val = 32768;
+    const uint16_t AGC_ADESIRED_val = 2048;
 
     std::cout << "INFO: device_handler::set_agc()";
 

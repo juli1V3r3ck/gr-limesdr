@@ -94,7 +94,7 @@ class source_impl : public source {
     
     void set_tcxo_dac(uint16_t dacVal = 125);
 
-    void set_agc(int enabled = 0);
+    void set_agc(uint16_t enabled = 0);
 };
 } // namespace limesdr
 } // namespace gr

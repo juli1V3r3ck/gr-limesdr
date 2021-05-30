@@ -146,6 +146,8 @@ class LIMESDR_API source : virtual public gr::block {
      * @param   dacVal		   DAC value (0-65535)
      */
      virtual void set_tcxo_dac(uint16_t dacVal = 125 ) = 0;
+
+     virtual void set_agc(uint16_t enabled = 0) = 0;
 };
 } // namespace limesdr
 } // namespace gr
