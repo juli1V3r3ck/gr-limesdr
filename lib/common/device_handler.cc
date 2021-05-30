@@ -20,6 +20,9 @@
 
 #include "device_handler.h"
 #include <LMS7002M_parameters.h>
+#include <lms7_device.h>
+
+extern lime::LMS7_Device* CheckDevice(lms_device_t* device);
 
 device_handler::~device_handler() { delete list; }
 
@@ -569,31 +572,38 @@ void device_handler::set_agc(int device_number, int enabled) {
     const int AGC_ADESIRED_val = 2048;
 
     std::cout << "INFO: device_handler::set_agc()";
+
+    lms_device_t *device = device_handler::getInstance().get_device(device_number);
+    lime::LMS7_Device* lms = CheckDevice(device);
+    if (!lms)
+        device_handler::getInstance().error(device_number);
+
+    
     if (enabled) {
         // Enable AGC and disable bypass
-        if (LMS_WriteParam(device_handler::getInstance().get_device(device_number), LMS7param(AGC_MODE_RXTSP), AGC_MODE_val)) != LMS_SUCCESS)
+        if (LMS_WriteParam(device, LMS7param(AGC_MODE_RXTSP), AGC_MODE_val) != LMS_SUCCESS)
             device_handler::getInstance().error(device_number);
 
-        if (LMS_WriteParam(device_handler::getInstance().get_device(device_number), LMS7param(AGC_BYP_RXTSP), AGC_BYP_val)) != LMS_SUCCESS)
+        if (LMS_WriteParam(device, LMS7param(AGC_BYP_RXTSP), AGC_BYP_val) != LMS_SUCCESS)
             device_handler::getInstance().error(device_number);
 
         // Set AVG window
-        if (LMS_WriteParam(device_handler::getInstance().get_device(device_number), LMS7param(AGC_AVG_RXTSP), AGC_AVG_val)) != LMS_SUCCESS)
+        if (LMS_WriteParam(device, LMS7param(AGC_AVG_RXTSP), AGC_AVG_val) != LMS_SUCCESS)
             device_handler::getInstance().error(device_number);
 
         // Set AGC Gain
-        if (LMS_WriteParam(device_handler::getInstance().get_device(device_number), LMS7param(AGC_K_RXTSP), AGC_K_val)) != LMS_SUCCESS)
+        if (LMS_WriteParam(device, LMS7param(AGC_K_RXTSP), AGC_K_val) != LMS_SUCCESS)
             device_handler::getInstance().error(device_number);
 
         // Set AGC Desired Amplitude
-        if (LMS_WriteParam(device_handler::getInstance().get_device(device_number), LMS7param(AGC_ADESIRED_RXTSP), AGC_ADESIRED_val)) != LMS_SUCCESS)
+        if (LMS_WriteParam(device, LMS7param(AGC_ADESIRED_RXTSP), AGC_ADESIRED_val) != LMS_SUCCESS)
             device_handler::getInstance().error(device_number);
 
         uint32_t wantedRSSI = 87330 / pow(10.0, (3+CREST_FACTOR)/20);
-        device_handler::getInstance().get_device(device_number)->MCU_AGCStart(wantedRSSI);
+        lms->MCU_AGCStart(wantedRSSI);
     }
     else {
-        device_handler::getInstance().get_device(device_number)->MCU_AGCStop();
+        lms->MCU_AGCStop();
     }
 }
 
