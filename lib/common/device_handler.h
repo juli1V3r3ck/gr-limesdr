@@ -297,6 +297,16 @@ class device_handler {
      * @param   dacVal		   DAC value (0-65535)
      */
     void set_tcxo_dac(int device_number, uint16_t dacVal);
+
+    /**
+     * Set AGC with his parameters
+     * 
+     * @param   device_number  Device number from the list of LMS_GetDeviceList.
+     *
+     * @param   enabled		   The AGC is enabled and bypass is disabled.
+     */
+    void set_agc(int device_number, int enabled);
+        
         /**
      * Sets up LimeRFE device pointer so that automatic channel configuration could be made
      * @param   rfe_dev  Pointer to LimeRFE device descriptor

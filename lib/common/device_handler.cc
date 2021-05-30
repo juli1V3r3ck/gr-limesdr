@@ -559,6 +559,44 @@ void device_handler::set_tcxo_dac(int device_number, uint16_t dacVal) {
     }
 }
 
+void device_handler::set_agc(int device_number, int enabled) {
+    // Default values (TODO: transform into parameters)
+    const double CREST_FACTOR = 1.414; // Crest factor of a sine wave (FSK modulation)
+    const int AGC_MODE_val = 1;
+    const int AGC_BYP_val = 0;
+    const int AGC_AVG_val = 0;
+    const int AGC_K_val = 131072;
+    const int AGC_ADESIRED_val = 2048;
+
+    std::cout << "INFO: device_handler::set_agc()";
+    if (enabled) {
+        // Enable AGC and disable bypass
+        if (LMS_WriteParam(device_handler::getInstance().get_device(device_number), LMS7param(AGC_MODE_RXTSP), AGC_MODE_val)) != LMS_SUCCESS)
+            device_handler::getInstance().error(device_number);
+
+        if (LMS_WriteParam(device_handler::getInstance().get_device(device_number), LMS7param(AGC_BYP_RXTSP), AGC_BYP_val)) != LMS_SUCCESS)
+            device_handler::getInstance().error(device_number);
+
+        // Set AVG window
+        if (LMS_WriteParam(device_handler::getInstance().get_device(device_number), LMS7param(AGC_AVG_RXTSP), AGC_AVG_val)) != LMS_SUCCESS)
+            device_handler::getInstance().error(device_number);
+
+        // Set AGC Gain
+        if (LMS_WriteParam(device_handler::getInstance().get_device(device_number), LMS7param(AGC_K_RXTSP), AGC_K_val)) != LMS_SUCCESS)
+            device_handler::getInstance().error(device_number);
+
+        // Set AGC Desired Amplitude
+        if (LMS_WriteParam(device_handler::getInstance().get_device(device_number), LMS7param(AGC_ADESIRED_RXTSP), AGC_ADESIRED_val)) != LMS_SUCCESS)
+            device_handler::getInstance().error(device_number);
+
+        uint32_t wantedRSSI = 87330 / pow(10.0, (3+CREST_FACTOR)/20);
+        device_handler::getInstance().get_device(device_number)->MCU_AGCStart(wantedRSSI);
+    }
+    else {
+        device_handler::getInstance().get_device(device_number)->MCU_AGCStop();
+    }
+}
+
 void device_handler::set_rfe_device(rfe_dev_t* rfe_dev) { rfe_device.rfe_dev = rfe_dev; }
 
 void device_handler::update_rfe_channels()

@@ -48,6 +48,7 @@ self.$(id).set_nco($nco_freq_ch0,0)
 #if $nco_freq_ch1() != 0 and $channel_mode() > 0
 self.$(id).set_nco($nco_freq_ch1,1)
 #end if
+self.$(id).set_agc($agc_enabled)
 #end if
 #if $allow_tcxo_dac() == 1
 self.$(id).set_tcxo_dac($dacVal)
@@ -66,6 +67,7 @@ self.$(id).set_tcxo_dac($dacVal)
     <callback>set_gain($gain_dB_ch0,0)</callback>
     <callback>set_gain($gain_dB_ch1,1)</callback>
 	  <callback>set_tcxo_dac($dacVal)</callback>
+	  <callback>set_agc($agc_enabled)</callback>
 		       
     <param_tab_order>
       <tab>General</tab>
@@ -113,6 +115,28 @@ self.$(id).set_tcxo_dac($dacVal)
         <key>rf_freq</key>
         <value>100e6</value>
         <type>float</type>
+    </param>
+
+    <param>
+        <name>AGC</name>
+        <key>agc_enabled</key>
+        <value>0</value>
+        <type>int</type>
+        <option>
+            <name>Disabled</name>
+            <key>0</key>
+        </option>
+        <options>
+            <name>Enabled</name>
+            <key>1</key>
+        </option>
+        <hide>
+        #if $filename() != ""
+          all
+        #else
+          none
+        #end if
+        </hide>
     </param>
 
     <param>
@@ -494,6 +518,10 @@ OVERSAMPLE
 Here you can select oversampling value for RX. Default value uses highest possible oversampling value.
 
 Note: LimeSDR-Mini and LimeSDR-Micro supports only the same oversampling value for TX and RX.
+-------------------------------------------------------------------------------------------------------------------
+Automatic Gain Control
+
+Here you can enable/disable the AGC of the RX path.
 -------------------------------------------------------------------------------------------------------------------
 NCO FREQUENCY
 

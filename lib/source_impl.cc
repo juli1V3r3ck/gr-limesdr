@@ -313,5 +313,9 @@ void source_impl::set_tcxo_dac(uint16_t dacVal) {
     device_handler::getInstance().set_tcxo_dac(stored.device_number, dacVal);
 }
 
+void source_impl::set_agc(int enabled) {
+    device_handler::getInstance().set_agc(stored.device_number, enabled);
+}
+
 } // namespace limesdr
 } // namespace gr
