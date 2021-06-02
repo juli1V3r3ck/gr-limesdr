@@ -22,7 +22,13 @@
 #include <LMS7002M_parameters.h>
 #include <lms7_device.h>
 
-extern lime::LMS7_Device* CheckDevice(lms_device_t* device);
+inline lime::LMS7_Device* CheckDevice(lms_device_t* device)
+{
+    if (device != nullptr)
+        return (lime::LMS7_Device*)device;
+    //lime::error("Device cannot be NULL.");
+    return nullptr;
+}
 
 device_handler::~device_handler() { delete list; }
 
